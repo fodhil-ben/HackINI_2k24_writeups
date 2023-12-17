@@ -65,12 +65,12 @@ so (2 ** 32) - 1
 but what if we pass to it a number so that when it does **distanceTraveled + advanceWithDistance**
 the result will be greater the 2 ** 32 - 1 
 
-it will result in a negative number beacuse it depassed the 32 bit limit
+it will overflow beacuse it depassed the 32 bit limit
 
-so **distanceTraveled + advanceWithDistance** will be negative
+so **distanceTraveled + advanceWithDistance** will be set to 0 first and then it will add the rest
 
 and **distanceTraveled += advanceWithDistance;**
-will decrease the value of distanceTraveled 
+will overflow to reach zero and then start counting again
 
 so that is the solution 
 
@@ -86,16 +86,14 @@ here is a simple example of integer overflow
     ============== 0b100000000000000000000000000000000
 
 
-    1337 =          0b11111111111111111111111111111111
+    1337 =          0b00000000000000000000010100111001
 +
-    (2 ** 32) - 1 = 0b00000000000000000000000000000001
+    (2 ** 32) - 1 = 0b11111111111111111111111111111111
     ---------------------------------------------------
     ============== 0b100000000000000000000010100111000
 
-and because it only 32 bit it will take the first 32 bit starting from the right so 00000000000000000000010100111000
-which is equal to 1336
 
-so by adding (2 ** 32) - 1 we actually did 1337 - 1
+so by adding (2 ** 32) - 1 it actually got reseted to 0 and then add the rest which is 1336
 
 so what if we do 
 
